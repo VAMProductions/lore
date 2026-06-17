@@ -8,9 +8,9 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /build
 COPY . .
 
-RUN --mount=type=cache,target=/usr/local/cargo/registry \
-    --mount=type=cache,target=/usr/local/cargo/git \
-    --mount=type=cache,target=/build/target \
+RUN --mount=type=cache,target=/usr/local/cargo/registry,id=cargo-reg \
+    --mount=type=cache,target=/usr/local/cargo/git,id=cargo-git \
+    --mount=type=cache,target=/build/target,id=rust-build \
     cargo build --release --bin loreserver && \
     cp /build/target/release/loreserver /build/loreserver-bin
 
@@ -40,7 +40,6 @@ ENV LORE_ENV=docker
 ENV RUST_LOG=info
 
 RUN mkdir -p /data
-VOLUME /data
 
 # QUIC + gRPC: 41337, HTTP: 41339
 EXPOSE 41337 41339
