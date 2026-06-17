@@ -8,9 +8,9 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /build
 COPY . .
 
-RUN --mount=type=cache,target=/usr/local/cargo/registry,id=cargo-reg \
-    --mount=type=cache,target=/usr/local/cargo/git,id=cargo-git \
-    --mount=type=cache,target=/build/target,id=rust-build \
+RUN --mount=type=cache,target=/usr/local/cargo/registry,id=build-cache-registry \
+    --mount=type=cache,target=/usr/local/cargo/git,id=build-cache-git \
+    --mount=type=cache,target=/build/target,id=build-cache-target \
     cargo build --release --bin loreserver && \
     cp /build/target/release/loreserver /build/loreserver-bin
 
